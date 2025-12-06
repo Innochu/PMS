@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using PMS.Api.Data;
 using PMS.Api.Services;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
