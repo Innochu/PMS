@@ -31,7 +31,14 @@ namespace PMS.Api.Services
             return result == PasswordVerificationResult.Success ? user : null;
         }
 
-        public async Task<User> CreateUserAsync(string username, string password, string? email = null)
+        public async Task<User> CreateUserAsync(
+             string username,
+             string password,
+             string email,
+             string firstName,
+             string lastName,
+             string role,
+             string department)
         {
             var existing = await FindByUsernameAsync(username);
             if (existing != null) return existing;
@@ -39,12 +46,17 @@ namespace PMS.Api.Services
             var user = new User
             {
                 Username = username,
-                Email = email
+                Email = email,
+                FirstName = firstName,
+                LastName = lastName,
+                role = role,
+                Department = department
             };
 
             user.Password = _hasher.HashPassword(user, password);
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
+
             return user;
         }
 

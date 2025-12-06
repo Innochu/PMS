@@ -36,7 +36,15 @@ using (var scope = app.Services.CreateScope())
     var demoUser = await userService.FindByUsernameAsync("demo");
     if (demoUser == null)
     {
-        await userService.CreateUserAsync("demo", "Password123!", "demo@example.com");
+        await userService.CreateUserAsync(
+            username: "demo",
+            password: "Password123!",
+            email: "demo@example.com",
+            firstName: "Demo",
+            lastName: "User",
+            role: "Admin",
+            department: "IT"
+        );
     }
 }
 
