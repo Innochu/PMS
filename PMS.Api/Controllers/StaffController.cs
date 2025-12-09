@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PMS.Api.Services;
 using PMS.Api.Dtos;
+using PMS.Api.Services;
 using System;
+using System.Net.Mail;
 
 namespace PMS.Api.Controllers
 {
@@ -52,11 +53,21 @@ namespace PMS.Api.Controllers
                 await _emailService.SendEmailAsync(request.Email, subject, html);
                 return Accepted(new { email = request.Email, acceptUrl });
             }
-            catch (Exception ex)
+            catch (SmtpFailedRecipientException ex)
             {
-                _logger.LogError(ex, "Failed to send invite to {Email}", request.Email);
-                return StatusCode(500, "Failed to send invite email.");
+                _logger.LogError(ex, "SMTP failed recipient error: {Recipient}", ex.FailedRecipient);
+                throw; // rethrow if needed
             }
+            catch (SmtpException ex)
+            {
+                _logger.LogError(ex, "SMTP exception: StatusCode={StatusCode}, Message={Message}", ex.StatusCode, ex.Message);
+                throw; // rethrow if needed
+            }
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError(ex, "Failed to send invite to {Email}", request.Email);
+            //    return StatusCode(500, "Failed to send invite email.");
+            //}
         }
     }
 }
