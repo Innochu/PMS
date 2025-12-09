@@ -1,61 +1,48 @@
-﻿using System.Net;
-using MailKit.Security;
-using MailKit.Net.Smtp;
-using Microsoft.Extensions.Options;
-using MimeKit;
-using PMS.Api.Models;
-using System.Threading;
+﻿using Microsoft.Extensions.Logging;
+using PMS.Api.Services;
+using System.Net.Mail;
 
-namespace PMS.Api.Services
+public class EmailService : IEmailService
 {
-    public class EmailService : IEmailService
+    private readonly ILogger<EmailService> _logger;
+
+    public EmailService(ILogger<EmailService> logger)
     {
-        private readonly EmailSettings _settings;
+        _logger = logger;
+    }
 
-        public EmailService(IOptions<EmailSettings> options)
+    public async Task SendEmailAsync(string to, string subject, string htmlBody, CancellationToken cancellationToken = default)
+    {
+        using var client = new SmtpClient("smtp.yourprovider.com")
         {
-            _settings = options.Value;
+            Port = 587,
+            Credentials = new System.Net.NetworkCredential("your-email@domain.com", "your-smtp-password"),
+            EnableSsl = true
+        };
+
+        using var mailMessage = new MailMessage("your-email@domain.com", to, subject, htmlBody)
+        {
+            IsBodyHtml = true
+        };
+
+        try
+        {
+            await client.SendMailAsync(mailMessage);
         }
-
-        public async Task SendEmailAsync(string toEmail, string subject, string htmlBody, CancellationToken cancellationToken = default)
+        catch (SmtpFailedRecipientException ex)
         {
-            // Pre-resolve SMTP host so DNS failures are visible and descriptive
-            try
-            {
-                var addresses = await Dns.GetHostAddressesAsync(_settings.Host, cancellationToken);
-                if (addresses == null || addresses.Length == 0)
-                    throw new InvalidOperationException($"DNS lookup returned no addresses for '{_settings.Host}'.");
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Failed to resolve SMTP host '{_settings.Host}': {ex.Message}", ex);
-            }
-
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(_settings.FromName, _settings.FromEmail));
-            message.To.Add(MailboxAddress.Parse(toEmail));
-            message.Subject = subject;
-
-            var body = new BodyBuilder { HtmlBody = htmlBody };
-            message.Body = body.ToMessageBody();
-
-            using var client = new SmtpClient();
-
-            SecureSocketOptions socketOptions = _settings.UseSsl
-                ? SecureSocketOptions.SslOnConnect
-                : _settings.UseStartTls
-                    ? SecureSocketOptions.StartTls
-                    : SecureSocketOptions.None;
-
-            await client.ConnectAsync(_settings.Host, _settings.Port, socketOptions, cancellationToken);
-
-            if (!string.IsNullOrWhiteSpace(_settings.Username))
-            {
-                await client.AuthenticateAsync(_settings.Username, _settings.Password, cancellationToken);
-            }
-
-            await client.SendAsync(message, cancellationToken);
-            await client.DisconnectAsync(true, cancellationToken);
+            _logger.LogError(ex, "SMTP failed recipient error: {Recipient}", ex.FailedRecipient);
+            throw; // rethrow if needed
+        }
+        catch (SmtpException ex)
+        {
+            _logger.LogError(ex, "SMTP exception: StatusCode={StatusCode}, Message={Message}", ex.StatusCode, ex.Message);
+            throw; // rethrow if needed
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "General email sending error");
+            throw;
         }
     }
 }
