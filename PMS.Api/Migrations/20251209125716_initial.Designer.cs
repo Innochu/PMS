@@ -3,6 +3,7 @@ using System;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PMS.Api.Data;
@@ -12,9 +13,11 @@ using PMS.Api.Data;
 namespace PMS.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251209125716_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,7 +74,7 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("ProjectId1");
 
-                    b.ToTable("ActionItems", (string)null);
+                    b.ToTable("ActionItems");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.Document", b =>
@@ -124,7 +127,7 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("UploadedById");
 
-                    b.ToTable("Documents", (string)null);
+                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.DrbDecision", b =>
@@ -166,7 +169,7 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("ProjectId1");
 
-                    b.ToTable("DrbDecisions", (string)null);
+                    b.ToTable("DrbDecisions");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.OapForm", b =>
@@ -240,7 +243,7 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("ProjectId1");
 
-                    b.ToTable("OapForms", (string)null);
+                    b.ToTable("OapForms");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.PcapForm", b =>
@@ -312,7 +315,7 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("ProjectId1");
 
-                    b.ToTable("PcapForms", (string)null);
+                    b.ToTable("PcapForms");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.PinForm", b =>
@@ -362,7 +365,7 @@ namespace PMS.Api.Migrations
                     b.HasIndex("ProjectId")
                         .IsUnique();
 
-                    b.ToTable("PinForms", (string)null);
+                    b.ToTable("PinForms");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.Portfolio", b =>
@@ -382,7 +385,7 @@ namespace PMS.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Portfolios", (string)null);
+                    b.ToTable("Portfolios");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.Project", b =>
@@ -454,7 +457,7 @@ namespace PMS.Api.Migrations
                     b.HasIndex("ProjectNumber")
                         .IsUnique();
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.User", b =>
@@ -495,7 +498,7 @@ namespace PMS.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.WorkflowInstance", b =>
@@ -525,7 +528,7 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("ProjectId1");
 
-                    b.ToTable("WorkflowInstances", (string)null);
+                    b.ToTable("WorkflowInstances");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.WorkflowStep", b =>
@@ -569,7 +572,7 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("WorkflowInstanceId");
 
-                    b.ToTable("WorkflowSteps", (string)null);
+                    b.ToTable("WorkflowSteps");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.ActionItem", b =>

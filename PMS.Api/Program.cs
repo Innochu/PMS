@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PMS.Api.Data;
 using PMS.Api.Services;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
-
+using PMS.Api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +18,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Bind EmailSettings and register email service
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddSingleton<IEmailService, EmailService>();
 
 // Application services
 builder.Services.AddScoped<IProjectService, ProjectService>();
@@ -30,9 +33,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
-    // Ensure database created
-   // db.Database.EnsureCreated();
-    // Create a demo user if none exists
+    
     var demoUser = await userService.FindByUsernameAsync("demo");
     if (demoUser == null)
     {
@@ -43,7 +44,8 @@ using (var scope = app.Services.CreateScope())
             firstName: "Demo",
             lastName: "User",
             role: "Admin",
-            department: "IT"
+            department: "IT",
+            status : "Accepted"
         );
     }
 }

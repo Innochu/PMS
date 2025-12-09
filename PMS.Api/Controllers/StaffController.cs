@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using PMS.Api.Services;
+using PMS.Api.Dtos;
+using System;
 
 namespace PMS.Api.Controllers
 {
@@ -8,13 +11,16 @@ namespace PMS.Api.Controllers
     public class StaffController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
+        private readonly ILogger<StaffController> _logger;
 
-        public StaffController(IUserService userService)
+        public StaffController(IUserService userService, IEmailService emailService, ILogger<StaffController> logger)
         {
             _userService = userService;
+            _emailService = emailService;
+            _logger = logger;
         }
 
-       
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
@@ -23,6 +29,34 @@ namespace PMS.Api.Controllers
 
             var result = await _userService.GetStaffAsync(pageNumber, pageSize);
             return Ok(result);
+        }
+
+        [HttpPost("invite")]
+        public async Task<IActionResult> SendInvite([FromBody] InviteRequest request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.Email))
+                return BadRequest("Email is required.");
+            var acceptUrl = "";
+                var host = Request?.Host.Value ?? "example.com";
+                var scheme = Request?.Scheme ?? "https";
+                acceptUrl = $"{scheme}://{host}/accept-invite?email={Uri.EscapeDataString(request.Email)}";
+   
+
+            var subject = "Invitation to PMS";
+            var html = $@"
+                <p>you have been invited to PMS workspace, click the link below to accept invitation</p>
+                <p><a href=""{acceptUrl}"">Accept invitation</a></p>";
+
+            try
+            {
+                await _emailService.SendEmailAsync(request.Email, subject, html);
+                return Accepted(new { email = request.Email, acceptUrl });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send invite to {Email}", request.Email);
+                return StatusCode(500, "Failed to send invite email.");
+            }
         }
     }
 }

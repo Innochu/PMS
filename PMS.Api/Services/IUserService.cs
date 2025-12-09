@@ -1,5 +1,5 @@
-﻿using PMS.Api.Models;
-using PMS.Api.Dtos;
+﻿using PMS.Api.Dtos;
+using PMS.Api.Models;
 
 namespace PMS.Api.Services
 {
@@ -14,10 +14,13 @@ namespace PMS.Api.Services
             string firstName,
             string lastName,
             string role,
-            string department
+            string department,
+            string status
         );
 
         Task<PagedResult<StaffDto>> GetStaffAsync(int pageNumber, int pageSize);
+
+        // Update an existing user. Returns the updated user or null if not found.
+        Task<User?> UpdateUserAsync(string id, UpdateStaffRequest request);
     }
 }
- 

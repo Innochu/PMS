@@ -2,7 +2,7 @@
 {
     public class LoginResponse
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public string Username { get; set; } = null!;
         public string? Message { get; set; }
     }

@@ -38,7 +38,8 @@ namespace PMS.Api.Services
              string firstName,
              string lastName,
              string role,
-             string department)
+             string department,
+             string status)
         {
             var existing = await FindByUsernameAsync(username);
             if (existing != null) return existing;
@@ -50,11 +51,51 @@ namespace PMS.Api.Services
                 FirstName = firstName,
                 LastName = lastName,
                 role = role,
-                Department = department
+                Department = department,
+                Status = status
             };
 
             user.Password = _hasher.HashPassword(user, password);
             _db.Users.Add(user);
+            await _db.SaveChangesAsync();
+
+            return user;
+        }
+
+        // Update an existing user. Returns updated user or null if not found.
+        public async Task<User?> UpdateUserAsync(string id, UpdateStaffRequest request)
+        {
+            var user = await _db.Users.FindAsync(id);
+            if (user == null) return null;
+
+            // Email uniqueness check if changing email
+            if (!string.IsNullOrWhiteSpace(request.Email) && request.Email != user.Email)
+            {
+                var emailTaken = await _db.Users.AnyAsync(u => u.Email == request.Email && u.Id != id);
+                if (emailTaken)
+                    throw new InvalidOperationException("Email is already in use by another user.");
+                user.Email = request.Email;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.FirstName))
+                user.FirstName = request.FirstName;
+
+            if (!string.IsNullOrWhiteSpace(request.LastName))
+                user.LastName = request.LastName;
+
+            if (!string.IsNullOrWhiteSpace(request.Role))
+                user.role = request.Role;
+
+            if (!string.IsNullOrWhiteSpace(request.Department))
+                user.Department = request.Department;
+
+
+            if (!string.IsNullOrWhiteSpace(request.Status))
+            {
+                user.Status = request.Status;
+            }
+
+            _db.Users.Update(user);
             await _db.SaveChangesAsync();
 
             return user;

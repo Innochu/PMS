@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PMS.Api.Dtos;
+using PMS.Api.Models;
 using PMS.Api.Services;
 
 namespace PMS.Api.Controllers
@@ -31,6 +32,17 @@ namespace PMS.Api.Controllers
                 Username = user.Username,
                 Message = "Login successful"
             };
+            try
+            {
+                await _users.UpdateUserAsync(user.Id, new UpdateStaffRequest
+                {
+                    Status = "Accepted"
+                });
+            }
+            catch
+            {
+                // we intentionally do not fail login if status update fails
+            }
 
             return Ok(response);
         }
