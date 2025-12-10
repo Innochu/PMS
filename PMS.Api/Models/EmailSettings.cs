@@ -9,6 +9,7 @@
         public string FromName { get; set; } = "";
         public string FromEmail { get; set; } = "";
         public bool UseSsl { get; set; } = false;
+        public string BREVO_API_KEY { get; set; } = "";
         public bool UseStartTls { get; set; } = false;
     }
 }

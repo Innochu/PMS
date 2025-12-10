@@ -21,6 +21,7 @@ namespace PMS.Api.Services
         public async Task SendEmailAsync8(string toEmail, string subject, string htmlBody)
         {
             var apiKey = Environment.GetEnvironmentVariable("BREVO_API_KEY");
+            //var api = _settings.BREVO_API_KEY;
 
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("api-key", apiKey);
