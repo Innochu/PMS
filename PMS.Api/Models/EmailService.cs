@@ -17,6 +17,28 @@ namespace PMS.Api.Services
             _settings = options.Value;
         }
 
+
+        public async Task SendEmailAsync8(string toEmail, string subject, string htmlBody)
+        {
+            var apiKey = Environment.GetEnvironmentVariable("BREVO_API_KEY");
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("api-key", apiKey);
+
+            var payload = new
+            {
+                sender = new { name = "IDPMS System", email = "chuksinnocent1@gmail.com" },
+                to = new[] { new { email = toEmail } },
+                subject = subject,
+                htmlContent = htmlBody
+            };
+
+            var response = await client.PostAsJsonAsync("https://api.brevo.com/v3/smtp/email", payload);
+            response.EnsureSuccessStatusCode();
+        }
+
+
+
         public async Task SendEmailAsync(string toEmail, string subject, string htmlBody, CancellationToken cancellationToken = default)
         {
             // Pre-resolve SMTP host so DNS failures are visible and descriptive

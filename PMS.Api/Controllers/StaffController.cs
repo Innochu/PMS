@@ -39,7 +39,7 @@ namespace PMS.Api.Controllers
         {
             try
             {
-                await _emailService.SendEmailAsync(
+                await _emailService.SendEmailAsync8(
                     toEmail: "chuksinnocent1@gmail.com",
                     subject: "Test from Brevo via MailKit",
                     htmlBody: "<h1>It works perfectly!</h1><p>Your IDPMS email system is live.</p>"
