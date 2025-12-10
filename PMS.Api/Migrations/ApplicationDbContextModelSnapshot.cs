@@ -47,9 +47,6 @@ namespace PMS.Api.Migrations
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("ProjectId1")
-                        .HasColumnType("integer");
-
                     b.Property<Guid?>("SourceId")
                         .HasColumnType("uuid");
 
@@ -69,9 +66,9 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("AssignedToId");
 
-                    b.HasIndex("ProjectId1");
+                    b.HasIndex("ProjectId");
 
-                    b.ToTable("ActionItems", (string)null);
+                    b.ToTable("ActionItems");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.Document", b =>
@@ -105,9 +102,6 @@ namespace PMS.Api.Migrations
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("ProjectId1")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("UploadedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -120,11 +114,11 @@ namespace PMS.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId1");
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("UploadedById");
 
-                    b.ToTable("Documents", (string)null);
+                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.DrbDecision", b =>
@@ -157,16 +151,13 @@ namespace PMS.Api.Migrations
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("ProjectId1")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DecidedById");
 
-                    b.HasIndex("ProjectId1");
+                    b.HasIndex("ProjectId");
 
-                    b.ToTable("DrbDecisions", (string)null);
+                    b.ToTable("DrbDecisions");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.OapForm", b =>
@@ -215,9 +206,6 @@ namespace PMS.Api.Migrations
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("ProjectId1")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Roadmap")
                         .HasColumnType("text");
 
@@ -238,9 +226,9 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("ApprovedById");
 
-                    b.HasIndex("ProjectId1");
+                    b.HasIndex("ProjectId");
 
-                    b.ToTable("OapForms", (string)null);
+                    b.ToTable("OapForms");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.PcapForm", b =>
@@ -284,9 +272,6 @@ namespace PMS.Api.Migrations
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("ProjectId1")
-                        .HasColumnType("integer");
-
                     b.Property<string>("SelectedAssuranceProducts")
                         .HasColumnType("text");
 
@@ -310,9 +295,9 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("ApprovedById");
 
-                    b.HasIndex("ProjectId1");
+                    b.HasIndex("ProjectId");
 
-                    b.ToTable("PcapForms", (string)null);
+                    b.ToTable("PcapForms");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.PinForm", b =>
@@ -333,8 +318,8 @@ namespace PMS.Api.Migrations
                     b.Property<string>("Dg1DecisionById")
                         .HasColumnType("text");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<JsonDocument>("Section1Data")
                         .IsRequired()
@@ -362,36 +347,32 @@ namespace PMS.Api.Migrations
                     b.HasIndex("ProjectId")
                         .IsUnique();
 
-                    b.ToTable("PinForms", (string)null);
+                    b.ToTable("PinForms");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.Portfolio", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Department")
                         .HasColumnType("text");
 
-                    b.Property<string>("PortfolioNumber")
+                    b.Property<string>("PortfolioName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Portfolios", (string)null);
+                    b.ToTable("Portfolios");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.Project", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ComplexityLevel")
                         .HasColumnType("text");
@@ -420,8 +401,8 @@ namespace PMS.Api.Migrations
                     b.Property<string>("OverallHealth")
                         .HasColumnType("text");
 
-                    b.Property<int>("PortfolioId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("PortfolioId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ProjectNumber")
                         .IsRequired()
@@ -454,7 +435,7 @@ namespace PMS.Api.Migrations
                     b.HasIndex("ProjectNumber")
                         .IsUnique();
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.User", b =>
@@ -495,7 +476,7 @@ namespace PMS.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.WorkflowInstance", b =>
@@ -504,11 +485,11 @@ namespace PMS.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("ProjectId1")
+                    b.Property<int>("ProjectId")
                         .HasColumnType("integer");
+
+                    b.Property<Guid>("ProjectId1")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("timestamp with time zone");
@@ -525,7 +506,7 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("ProjectId1");
 
-                    b.ToTable("WorkflowInstances", (string)null);
+                    b.ToTable("WorkflowInstances");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.WorkflowStep", b =>
@@ -569,7 +550,7 @@ namespace PMS.Api.Migrations
 
                     b.HasIndex("WorkflowInstanceId");
 
-                    b.ToTable("WorkflowSteps", (string)null);
+                    b.ToTable("WorkflowSteps");
                 });
 
             modelBuilder.Entity("PMS.Api.Models.ActionItem", b =>
@@ -580,7 +561,7 @@ namespace PMS.Api.Migrations
 
                     b.HasOne("PMS.Api.Models.Project", "Project")
                         .WithMany("ActionItems")
-                        .HasForeignKey("ProjectId1")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -593,7 +574,7 @@ namespace PMS.Api.Migrations
                 {
                     b.HasOne("PMS.Api.Models.Project", "Project")
                         .WithMany("Documents")
-                        .HasForeignKey("ProjectId1")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -618,7 +599,7 @@ namespace PMS.Api.Migrations
 
                     b.HasOne("PMS.Api.Models.Project", "Project")
                         .WithMany("DrbDecisions")
-                        .HasForeignKey("ProjectId1")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -635,7 +616,7 @@ namespace PMS.Api.Migrations
 
                     b.HasOne("PMS.Api.Models.Project", "Project")
                         .WithMany("OapForms")
-                        .HasForeignKey("ProjectId1")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -652,7 +633,7 @@ namespace PMS.Api.Migrations
 
                     b.HasOne("PMS.Api.Models.Project", "Project")
                         .WithMany("PcapForms")
-                        .HasForeignKey("ProjectId1")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

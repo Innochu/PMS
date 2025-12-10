@@ -63,11 +63,12 @@ namespace PMS.Api.Controllers
                 _logger.LogError(ex, "SMTP exception: StatusCode={StatusCode}, Message={Message}", ex.StatusCode, ex.Message);
                 throw; // rethrow if needed
             }
-            //catch (Exception ex)
-            //{
-            //    _logger.LogError(ex, "Failed to send invite to {Email}", request.Email);
-            //    return StatusCode(500, "Failed to send invite email.");
-            //}
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send invite to {Email}", request.Email);
+                return StatusCode(500, "Failed to send invite email.");
+            }
         }
     }
 }
+//ensure to log the errors from render

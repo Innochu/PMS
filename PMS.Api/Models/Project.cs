@@ -6,12 +6,12 @@ namespace PMS.Api.Models
     // 1. Project.cs - Core SSOT Entity
     public class Project
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         public string Name { get; set; } = null!;
 
-        public int PortfolioId { get; set; }
+        public Guid PortfolioId { get; set; }
         [JsonIgnore]
         public Portfolio? Portfolio { get; set; }
         public string ProjectNumber { get; set; } = string.Empty; // e.g., 25MOCPDR001

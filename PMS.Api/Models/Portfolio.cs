@@ -4,7 +4,7 @@ namespace PMS.Api.Models
 {
     public class Portfolio
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         public string PortfolioName { get; set; } = null!;

@@ -5,7 +5,7 @@ namespace PMS.Api.Models
     public class PinForm
     {
         public Guid Id { get; set; }
-        public int ProjectId { get; set; }
+        public Guid ProjectId { get; set; }
         public Project Project { get; set; } = null!;
         public JsonDocument Section1Data { get; set; } = JsonDocument.Parse("{}");
         public JsonDocument Section2Data { get; set; } = JsonDocument.Parse("{}"); // Cost, Schedule, Risk

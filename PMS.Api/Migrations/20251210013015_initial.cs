@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,9 +16,8 @@ namespace PMS.Api.Migrations
                 name: "Portfolios",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PortfolioNumber = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PortfolioName = table.Column<string>(type: "text", nullable: false),
                     Department = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -50,10 +48,9 @@ namespace PMS.Api.Migrations
                 name: "Projects",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    PortfolioId = table.Column<int>(type: "integer", nullable: false),
+                    PortfolioId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProjectNumber = table.Column<string>(type: "text", nullable: false),
                     TempProjectId = table.Column<string>(type: "text", nullable: true),
                     Title = table.Column<string>(type: "text", nullable: false),
@@ -91,7 +88,6 @@ namespace PMS.Api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProjectId1 = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     AssignedToId = table.Column<string>(type: "text", nullable: true),
@@ -106,8 +102,8 @@ namespace PMS.Api.Migrations
                 {
                     table.PrimaryKey("PK_ActionItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ActionItems_Projects_ProjectId1",
-                        column: x => x.ProjectId1,
+                        name: "FK_ActionItems_Projects_ProjectId",
+                        column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -124,7 +120,6 @@ namespace PMS.Api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProjectId1 = table.Column<int>(type: "integer", nullable: false),
                     FileName = table.Column<string>(type: "text", nullable: false),
                     FileUrl = table.Column<string>(type: "text", nullable: false),
                     DocumentType = table.Column<string>(type: "text", nullable: false),
@@ -139,8 +134,8 @@ namespace PMS.Api.Migrations
                 {
                     table.PrimaryKey("PK_Documents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Documents_Projects_ProjectId1",
-                        column: x => x.ProjectId1,
+                        name: "FK_Documents_Projects_ProjectId",
+                        column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -158,7 +153,6 @@ namespace PMS.Api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProjectId1 = table.Column<int>(type: "integer", nullable: false),
                     Gate = table.Column<string>(type: "text", nullable: false),
                     Decision = table.Column<string>(type: "text", nullable: false),
                     DecidedById = table.Column<string>(type: "text", nullable: false),
@@ -170,8 +164,8 @@ namespace PMS.Api.Migrations
                 {
                     table.PrimaryKey("PK_DrbDecisions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DrbDecisions_Projects_ProjectId1",
-                        column: x => x.ProjectId1,
+                        name: "FK_DrbDecisions_Projects_ProjectId",
+                        column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -189,7 +183,6 @@ namespace PMS.Api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProjectId1 = table.Column<int>(type: "integer", nullable: false),
                     Version = table.Column<int>(type: "integer", nullable: false),
                     Phase = table.Column<string>(type: "text", nullable: false),
                     FormData = table.Column<JsonDocument>(type: "jsonb", nullable: false),
@@ -211,8 +204,8 @@ namespace PMS.Api.Migrations
                 {
                     table.PrimaryKey("PK_OapForms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OapForms_Projects_ProjectId1",
-                        column: x => x.ProjectId1,
+                        name: "FK_OapForms_Projects_ProjectId",
+                        column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -229,7 +222,6 @@ namespace PMS.Api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProjectId1 = table.Column<int>(type: "integer", nullable: false),
                     Version = table.Column<int>(type: "integer", nullable: false),
                     Phase = table.Column<string>(type: "text", nullable: false),
                     FormData = table.Column<JsonDocument>(type: "jsonb", nullable: false),
@@ -250,8 +242,8 @@ namespace PMS.Api.Migrations
                 {
                     table.PrimaryKey("PK_PcapForms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PcapForms_Projects_ProjectId1",
-                        column: x => x.ProjectId1,
+                        name: "FK_PcapForms_Projects_ProjectId",
+                        column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -267,7 +259,7 @@ namespace PMS.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     Section1Data = table.Column<JsonDocument>(type: "jsonb", nullable: false),
                     Section2Data = table.Column<JsonDocument>(type: "jsonb", nullable: false),
                     SpecialistInputs = table.Column<JsonDocument>(type: "jsonb", nullable: false),
@@ -299,8 +291,8 @@ namespace PMS.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProjectId1 = table.Column<int>(type: "integer", nullable: false),
+                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    ProjectId1 = table.Column<Guid>(type: "uuid", nullable: false),
                     WorkflowType = table.Column<string>(type: "text", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
                     StartedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -353,14 +345,14 @@ namespace PMS.Api.Migrations
                 column: "AssignedToId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActionItems_ProjectId1",
+                name: "IX_ActionItems_ProjectId",
                 table: "ActionItems",
-                column: "ProjectId1");
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Documents_ProjectId1",
+                name: "IX_Documents_ProjectId",
                 table: "Documents",
-                column: "ProjectId1");
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Documents_UploadedById",
@@ -373,9 +365,9 @@ namespace PMS.Api.Migrations
                 column: "DecidedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DrbDecisions_ProjectId1",
+                name: "IX_DrbDecisions_ProjectId",
                 table: "DrbDecisions",
-                column: "ProjectId1");
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OapForms_ApprovedById",
@@ -383,9 +375,9 @@ namespace PMS.Api.Migrations
                 column: "ApprovedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OapForms_ProjectId1",
+                name: "IX_OapForms_ProjectId",
                 table: "OapForms",
-                column: "ProjectId1");
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PcapForms_ApprovedById",
@@ -393,9 +385,9 @@ namespace PMS.Api.Migrations
                 column: "ApprovedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PcapForms_ProjectId1",
+                name: "IX_PcapForms_ProjectId",
                 table: "PcapForms",
-                column: "ProjectId1");
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PinForms_Dg1DecisionById",

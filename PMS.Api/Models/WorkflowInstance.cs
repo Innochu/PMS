@@ -3,7 +3,7 @@
     public class WorkflowInstance
     {
         public Guid Id { get; set; }
-        public Guid ProjectId { get; set; }
+        public int ProjectId { get; set; }
         public Project Project { get; set; } = null!;
 
         public string WorkflowType { get; set; } = string.Empty; // "PIN Approval", "OAP Review"
