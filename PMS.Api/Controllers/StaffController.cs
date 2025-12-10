@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using PMS.Api.Dtos;
 using PMS.Api.Services;
 using System;
+using System.Net;
 using System.Net.Mail;
 
 namespace PMS.Api.Controllers
@@ -31,6 +32,27 @@ namespace PMS.Api.Controllers
             var result = await _userService.GetStaffAsync(pageNumber, pageSize);
             return Ok(result);
         }
+
+
+        [HttpPost("send-email")]
+        public async Task<IActionResult> SendEmail()
+        {
+            try
+            {
+                await _emailService.SendEmailAsync(
+                    toEmail: "chuksinnocent1@gmail.com",
+                    subject: "Test from Brevo via MailKit",
+                    htmlBody: "<h1>It works perfectly!</h1><p>Your IDPMS email system is live.</p>"
+                );
+
+                return Ok("Email sent successfully using EmailService!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
 
         [HttpPost("invite")]
         public async Task<IActionResult> SendInvite([FromBody] InviteRequest request)
