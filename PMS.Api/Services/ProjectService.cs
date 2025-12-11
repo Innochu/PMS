@@ -35,7 +35,7 @@ namespace PMS.Api.Services
             {
                 Id = Guid.NewGuid(),
                 Title = request.Name.Trim(),
-                ProjectNumber = projectNumber,                    // Official number
+                ProjectNumber = request.DefaultNumber,                    // Official number
                 PortfolioId = request.PortfolioId,
                 CreatedById = request.CreatedById,
                 CreatedAt = DateTime.UtcNow,
