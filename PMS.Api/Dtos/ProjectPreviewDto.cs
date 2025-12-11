@@ -21,9 +21,9 @@
         public string? Dg1Comments { get; set; }
 
         // Form Fields
-        public int? ProposalNumber { get; set; }
+        public string? ProposalNumber { get; set; }
         public string? Location { get; set; }
-        public int? UnitNumber { get; set; }
+        public string? UnitNumber { get; set; }
         public string? ExecutiveSummary { get; set; }
         public string? ProjectObjective { get; set; }
         public string? Remark { get; set; }

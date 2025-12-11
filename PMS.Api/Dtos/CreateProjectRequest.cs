@@ -8,8 +8,8 @@ namespace PMS.Api.Dtos
         [Required] public Guid PortfolioId { get; set; }
         [Required] public string CreatedById { get; set; }
 
-        public int ProposalNumber { get; set; }
-        public int DefaultNumber { get; set; }
+        public string ProposalNumber { get; set; }
+        public string DefaultNumber { get; set; }
         public string? Location { get; set; }
         public int UnitNumber { get; set; }
         public string? ExecutiveSummary { get; set; }
