@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PMS.Api.Dtos;
+using PMS.Api.Models;
 using PMS.Api.Services;
 using System;
 using System.Net;
 using System.Net.Mail;
+using System.Net.NetworkInformation;
 
 namespace PMS.Api.Controllers
 {
@@ -39,17 +41,13 @@ namespace PMS.Api.Controllers
         {
             try
             {
-                var acceptUrl = "";
-                var host = Request?.Host.Value ?? "example.com";
-                var scheme = Request?.Scheme ?? "https";
-                acceptUrl = $"{scheme}://{host}/accept-invite?email={Uri.EscapeDataString(request.Email)}";
-
+               
                 await _emailService.SendEmailAsync8(
                     toEmail: request.Email,
                     subject: "Invitation to PMS",
             htmlBody: $@"
                 <p>you have been invited to PMS workspace, click the link below to accept invitation</p>
-                <p><a href=""{acceptUrl}"">Accept invitation</a></p>"
+                <p><a href=""{request.link}"">Accept invitation</a></p>"
                 );
 
                 return Ok("Email sent successfully using EmailService!");
