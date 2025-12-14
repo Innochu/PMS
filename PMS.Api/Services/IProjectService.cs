@@ -6,5 +6,6 @@ namespace PMS.Api.Services
     {
         Task<ProjectDto?> CreateProjectAsync(CreateProjectRequest request);
         Task<ProjectDto?> GetByIdAsync(Guid id);
+        Task<IEnumerable<ProjectDto>> GetByPortfolioAsync(Guid portfolioId);
     }
 }

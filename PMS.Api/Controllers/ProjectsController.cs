@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;     // Required for .Include() and .FirstOrDefaultAsync()
+using Microsoft.EntityFrameworkCore;   
 using PMS.Api.Data;
 using PMS.Api.Dtos;
 using PMS.Api.Services;
-using System.Text.Json;
 
 namespace PMS.Api.Controllers
 {
@@ -33,8 +32,14 @@ namespace PMS.Api.Controllers
             return Ok(created);
         }
 
-        // Fixed: parameter name must match route
-        [HttpGet("{id:guid}")]  // Use guid, not int
+        [HttpGet("portfolio/{portfolioId:guid}")]
+        public async Task<IActionResult> GetByPortfolio(Guid portfolioId)
+        {
+            var projects = await _projectService.GetByPortfolioAsync(portfolioId);
+            return Ok(projects);
+        }
+
+        [HttpGet("{id:guid}")] 
         public async Task<IActionResult> GetById(Guid id)
         {
             var project = await _projectService.GetByIdAsync(id);
@@ -43,6 +48,7 @@ namespace PMS.Api.Controllers
 
             return Ok(project);
         }
+
         [HttpGet("{id:guid}/preview")]
         public async Task<ActionResult<ProjectPreviewDto>> GetProjectPreview(Guid id)
         {
@@ -58,8 +64,8 @@ namespace PMS.Api.Controllers
             var pinForm = await _db.PinForms
                 .AsNoTracking()
                 .Include(pf => pf.Dg1DecisionBy)
-                .Include(pf => pf.RamAssessment)           // if you want RAM description from there
-                .Include(pf => pf.Co2Screening)            // same for CO2
+                .Include(pf => pf.RamAssessment)        
+                .Include(pf => pf.Co2Screening)           
                 .FirstOrDefaultAsync(pf => pf.ProjectId == id);
 
             var preview = new ProjectPreviewDto

@@ -16,7 +16,7 @@ namespace PMS.Api.Models
         [JsonIgnore]
         public Portfolio? Portfolio { get; set; }
         public string ProjectNumber { get; set; } = string.Empty; // e.g., 25MOCPDR001
-        public string? TempProjectId { get; set; }
+       // public string? TempProjectId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
         public string? ProjectType { get; set; } // Roadmap 1/2/3

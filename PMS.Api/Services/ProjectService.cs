@@ -14,6 +14,24 @@ namespace PMS.Api.Services
             _db = db;
         }
 
+        public async Task<IEnumerable<ProjectDto>> GetByPortfolioAsync(Guid portfolioId)
+        {
+            var projects = await _db.Projects
+                .AsNoTracking()
+                .Where(p => p.PortfolioId == portfolioId)
+                .OrderByDescending(p => p.CreatedAt)
+                .Select(p => new ProjectDto
+                {
+                    Id = p.Id,
+                    PortfolioId = p.PortfolioId,
+                    ProjectNumber = p.ProjectNumber,
+                    Name = p.Title
+                })
+                .ToListAsync();
+
+            return projects;
+        }
+
         public async Task<ProjectDto?> CreateProjectAsync(CreateProjectRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Name))
