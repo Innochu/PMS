@@ -22,8 +22,6 @@ namespace PMS.Api.Models
         public string? ProjectType { get; set; } // Roadmap 1/2/3
         public string? LocationArea { get; set; }
         public decimal? ApprovedCostUsd { get; set; }
-        [MaxLength(100)]
-        public string? ProjectLocationArea { get; set; }
 
         [MaxLength(50)]
         public string? TrainUnitNo { get; set; }

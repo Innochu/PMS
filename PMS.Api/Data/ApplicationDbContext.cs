@@ -80,6 +80,13 @@ namespace PMS.Api.Data
                 .HasForeignKey<ProjectPinCo2Screening>(c => c.PinId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<WorkflowInstance>()
+    .HasOne(w => w.Project)
+    .WithMany(p => p.Workflows)
+    .HasForeignKey(w => w.ProjectId)
+    .OnDelete(DeleteBehavior.Cascade);
+
+
             // MTO Score
             modelBuilder.Entity<PinForm>()
                 .HasOne(pf => pf.MtoScore)
