@@ -32,6 +32,13 @@ namespace PMS.Api.Controllers
             return Ok(created);
         }
 
+        [HttpGet("/")]
+        [HttpGet("ping")]
+        public IActionResult HealthCheck()
+        {
+            return Ok(new { status = "healthy", message = "PMS API is running" });
+        }
+
         [HttpGet("portfolio/{portfolioId:guid}")]
         public async Task<IActionResult> GetByPortfolio(Guid portfolioId)
         {
