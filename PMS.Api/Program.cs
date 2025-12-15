@@ -6,6 +6,15 @@ using PMS.Api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Disable config reloading in production (prevents inotify watchers)
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: false)
+        .AddEnvironmentVariables();
+}
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
